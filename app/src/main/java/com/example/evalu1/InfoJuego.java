@@ -1,7 +1,11 @@
 package com.example.evalu1;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +31,18 @@ public class InfoJuego extends AppCompatActivity {
         setContentView(R.layout.activity_info_juego);
         juegoUrlInfor= MainActivity.juegoUrlInfo;
         cargarInfo(juegoUrlInfor);
-
+        findViewById(R.id.btnback).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(InfoJuego.this, MainActivity.class);
+                InfoJuego.this.startActivity(myIntent);
+                try {
+                    this.finalize();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
     public void cargarInfo(String url){
@@ -57,6 +72,7 @@ public class InfoJuego extends AppCompatActivity {
         TextView tvDesarrol=findViewById(R.id.tvDesa);
         TextView tvplat=findViewById(R.id.tvPlatform);
         TextView tvpubli=findViewById(R.id.tvpubli);
+        TextView tvsalida=findViewById(R.id.tvsalida);
         TextView tvpOS=findViewById(R.id.tvOs);
         TextView tvGra=findViewById(R.id.tvGraphics);
         TextView tvsto=findViewById(R.id.tvStorage);
@@ -69,7 +85,8 @@ public class InfoJuego extends AppCompatActivity {
             tvplat.setText("Plataforma: "+juegoInfor.getString("platform"));
             tvCategoria.setText("Genero: "+juegoInfor.getString("genre"));
             tvDesarrol.setText("Desarrolador: "+juegoInfor.getString("developer"));
-            tvpubli.setText("Fecha de salida: "+juegoInfor.getString("release_date"));
+            tvpubli.setText("Publicador: "+juegoInfor.getString("publisher"));
+            tvsalida.setText("Fecha de salida: "+juegoInfor.getString("release_date"));
             tvpOS.setText("Sistema Operativo: "+ juegoInfor.getJSONObject("minimum_system_requirements").getString("os"));
             tvGra.setText("Gráfica: "+juegoInfor.getJSONObject("minimum_system_requirements").getString("graphics"));
             tvMemo.setText("Memoria: "+juegoInfor.getJSONObject("minimum_system_requirements").getString("memory"));
