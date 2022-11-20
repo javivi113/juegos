@@ -4,8 +4,10 @@ package com.example.evalu1;
 import androidx.cardview.widget.CardView;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +36,10 @@ import org.json.JSONObject;
 import java.util.Locale;
 
 public class MainActivity extends Activity {
+    SharedPreferences sharedpreferences;
+    public static final String mypreference = "mypref";
+    public static final String opcionFiltro = "nameKey";
+    public static final String opcionText = "emailKey";
     LinearLayout lyVJuegos;
     String[] opciones={"Todo","Año", "Categoria", "Titulo" };
     Spinner sp;
@@ -51,6 +57,16 @@ public class MainActivity extends Activity {
         sp=findViewById(R.id.spinner);
         txtINpLy =findViewById(R.id. textInputLayout);
         txtINpLy.setVisibility(View.INVISIBLE);
+        findViewById(R.id.btnLastSearch).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filtrarResp(opcionText,opcionFiltro);
+            }
+        });
+        sharedpreferences = getSharedPreferences(mypreference,Context.MODE_PRIVATE);
+        if (sharedpreferences.contains(opcionText) && sharedpreferences.contains((opcionFiltro))) {
+            findViewById(R.id.btnLastSearch).setEnabled(true);
+        }
         ArrayAdapter<String> adapter=new ArrayAdapter(this, android.R.layout.simple_spinner_item, opciones);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp.setAdapter(adapter);
@@ -97,6 +113,11 @@ public class MainActivity extends Activity {
                         e.printStackTrace();
                     }
                 }else{
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString(opcionFiltro, campo);
+                    editor.putString(opcionText, OpBusqueda);
+                    editor.commit();
+                    findViewById(R.id.btnLastSearch).setEnabled(true);
                     filtrarResp(campo,OpBusqueda);
                 }
             }
@@ -106,8 +127,8 @@ public class MainActivity extends Activity {
         try{
             switch (modo){
                 case "Año":
-                    for (int i=0; i<jsonArray.length(); i++){
-                        JSONObject jsonObject=jsonArray.getJSONObject(i);
+                    for (int i=0; i<leerApiArrayRes.length(); i++){
+                        JSONObject jsonObject=leerApiArrayRes.getJSONObject(i);
                         try {
                             if (jsonObject.getString("release_date").substring(0,4).equals(param)){
                                 addCardUnic(jsonObject.getString("title"), jsonObject.getString("thumbnail"));
@@ -118,8 +139,8 @@ public class MainActivity extends Activity {
                     }
                     break;
                 case "Titulo":
-                    for (int i=0; i<jsonArray.length(); i++){
-                        JSONObject jsonObject=jsonArray.getJSONObject(i);
+                    for (int i=0; i<leerApiArrayRes.length(); i++){
+                        JSONObject jsonObject=leerApiArrayRes.getJSONObject(i);
                         try {
                             if (jsonObject.getString("title").toLowerCase(Locale.ROOT).contains(param.toLowerCase(Locale.ROOT))){
                                 addCardUnic(jsonObject.getString("title"), jsonObject.getString("thumbnail"));
@@ -131,8 +152,8 @@ public class MainActivity extends Activity {
                     }
                     break;
                 case "Categoria":
-                    for (int i=0; i<jsonArray.length(); i++){
-                        JSONObject jsonObject=jsonArray.getJSONObject(i);
+                    for (int i=0; i<leerApiArrayRes.length(); i++){
+                        JSONObject jsonObject=leerApiArrayRes.getJSONObject(i);
                         try {
                             if (jsonObject.getString("genre").contains(param)){
                                 addCardUnic(jsonObject.getString("title"), jsonObject.getString("thumbnail"));
