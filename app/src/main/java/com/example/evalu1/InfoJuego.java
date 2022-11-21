@@ -82,16 +82,16 @@ public class InfoJuego extends AppCompatActivity {
             Picasso.get().load(juegoInfor.getString("thumbnail")).into(mainIm);
             tvTitulo.setText(juegoInfor.getString("title"));
             tvDesc.setText(juegoInfor.getString("description"));
-            tvplat.setText("Plataforma: "+juegoInfor.getString("platform"));
-            tvCategoria.setText("Genero: "+juegoInfor.getString("genre"));
-            tvDesarrol.setText("Desarrolador: "+juegoInfor.getString("developer"));
-            tvpubli.setText("Publicador: "+juegoInfor.getString("publisher"));
-            tvsalida.setText("Fecha de salida: "+juegoInfor.getString("release_date"));
-            tvpOS.setText("Sistema Operativo: "+ juegoInfor.getJSONObject("minimum_system_requirements").getString("os"));
-            tvGra.setText("Gráfica: "+juegoInfor.getJSONObject("minimum_system_requirements").getString("graphics"));
-            tvMemo.setText("Memoria: "+juegoInfor.getJSONObject("minimum_system_requirements").getString("memory"));
-            tvsto.setText("Almacenamiento: "+juegoInfor.getJSONObject("minimum_system_requirements").getString("storage"));
-            tvpro.setText("Procesador: "+juegoInfor.getJSONObject("minimum_system_requirements").getString("processor"));
+            tvplat.setText("Platform: "+juegoInfor.getString("platform"));
+            tvCategoria.setText("Genre: "+juegoInfor.getString("genre"));
+            tvDesarrol.setText("Developer: "+juegoInfor.getString("developer"));
+            tvpubli.setText("Publisher: "+juegoInfor.getString("publisher"));
+            tvsalida.setText("Release date: "+juegoInfor.getString("release_date"));
+            tvpOS.setText("Operating sistem: "+ juegoInfor.getJSONObject("minimum_system_requirements").getString("os"));
+            tvGra.setText("Graphics: "+juegoInfor.getJSONObject("minimum_system_requirements").getString("graphics"));
+            tvMemo.setText("Memory: "+juegoInfor.getJSONObject("minimum_system_requirements").getString("memory"));
+            tvsto.setText("Storage: "+juegoInfor.getJSONObject("minimum_system_requirements").getString("storage"));
+            tvpro.setText("Processor: "+juegoInfor.getJSONObject("minimum_system_requirements").getString("processor"));
             JSONArray imgs= juegoInfor.getJSONArray("screenshots");
             for(int i =0; i<5; i++){
                 switch (i){

@@ -9,6 +9,7 @@ import android.content.Intent;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,14 +43,15 @@ public class MainActivity extends Activity {
     public static final String opcionFiltro = "nameKey";
     public static final String opcionText = "emailKey";
     LinearLayout lyVJuegos;
-    String[] opciones={"Todo","Año", "Categoria", "Titulo" };
+    String[] opciones={"All","Year", "Category", "Title" };
     Spinner sp;
     String url = "https://www.freetogame.com/api/games";
     TextInputLayout txtINpLy;
-    String OpBusqueda="Todo";
+    String OpBusqueda="All";
     JSONArray leerApiArrayRes;
     JSONArray jsonArray;
     static String juegoUrlInfo;
+    ProgressBar pb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,8 @@ public class MainActivity extends Activity {
         sp=findViewById(R.id.spinner);
         txtINpLy =findViewById(R.id. textInputLayout);
         txtINpLy.setVisibility(View.INVISIBLE);
+        pb =findViewById(R.id.progressBar);
+        pb.setVisibility(View.INVISIBLE);
         findViewById(R.id.btnLastSearch).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,21 +82,21 @@ public class MainActivity extends Activity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String op=sp.getSelectedItem().toString();
                 switch (op){
-                    case "Año":
+                    case "Year":
                         txtINpLy.setVisibility(View.VISIBLE);
-                        OpBusqueda="Año";
+                        OpBusqueda="Year";
                         break;
-                    case "Categoria":
+                    case "Category":
                         txtINpLy.setVisibility(View.VISIBLE);
-                        OpBusqueda="Categoria";
+                        OpBusqueda="Category";
                         break;
-                    case "Titulo":
+                    case "Title":
                         txtINpLy.setVisibility(View.VISIBLE);
-                        OpBusqueda="Titulo";
+                        OpBusqueda="Title";
                         break;
                     default:
                         txtINpLy.setVisibility(View.INVISIBLE);
-                        OpBusqueda="Todo";
+                        OpBusqueda="All";
                         break;
                 }
             }
@@ -103,10 +108,18 @@ public class MainActivity extends Activity {
         findViewById(R.id.imageButton2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                pb.setVisibility(View.VISIBLE);
+                findViewById(R.id.textView2).setVisibility(View.GONE);
                 EditText input = findViewById(R.id.input);
                 String campo = input.getText().toString();
                 lyVJuegos.removeAllViews();
-                if (OpBusqueda.equals("Todo")){
+                new CountDownTimer(3000, 1000) {
+                    public void onTick(long millisUntilFinished) {}
+                    public void onFinish() {
+                        pb.setVisibility(View.GONE);
+                    }
+                }.start();
+                if (OpBusqueda.equals("All")){
                     try {
                         insertarJuegos();
                     } catch (JSONException e) {
@@ -120,13 +133,14 @@ public class MainActivity extends Activity {
                     findViewById(R.id.btnLastSearch).setEnabled(true);
                     filtrarResp(campo,OpBusqueda);
                 }
+
             }
         });
     }
     public void filtrarResp( String param, String modo){
         try{
             switch (modo){
-                case "Año":
+                case "Year":
                     for (int i=0; i<leerApiArrayRes.length(); i++){
                         JSONObject jsonObject=leerApiArrayRes.getJSONObject(i);
                         try {
@@ -138,7 +152,7 @@ public class MainActivity extends Activity {
                         }
                     }
                     break;
-                case "Titulo":
+                case "Title":
                     for (int i=0; i<leerApiArrayRes.length(); i++){
                         JSONObject jsonObject=leerApiArrayRes.getJSONObject(i);
                         try {
@@ -151,7 +165,7 @@ public class MainActivity extends Activity {
                         }
                     }
                     break;
-                case "Categoria":
+                case "Category":
                     for (int i=0; i<leerApiArrayRes.length(); i++){
                         JSONObject jsonObject=leerApiArrayRes.getJSONObject(i);
                         try {
@@ -189,6 +203,7 @@ public class MainActivity extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override
