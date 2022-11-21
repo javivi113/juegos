@@ -2,8 +2,10 @@ package com.example.evalu1;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,6 +33,7 @@ public class InfoJuego extends AppCompatActivity {
         setContentView(R.layout.activity_info_juego);
         juegoUrlInfor= MainActivity.juegoUrlInfo;
         cargarInfo(juegoUrlInfor);
+
         findViewById(R.id.btnback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,6 +68,7 @@ public class InfoJuego extends AppCompatActivity {
         Volley.newRequestQueue(this).add(postResquest);
     }
     public void insertarDatos(){
+
         ImageView mainIm=findViewById(R.id.mainImg);
         TextView tvTitulo=findViewById(R.id.tvTitulo);
         TextView tvDesc=findViewById(R.id.tvDescp);
@@ -79,8 +83,18 @@ public class InfoJuego extends AppCompatActivity {
         TextView tvpro=findViewById(R.id.tvProcessor);
         TextView tvMemo=findViewById(R.id.tvMemo);
         try {
+            String urlJuego=juegoInfor.getString("game_url");
+
             Picasso.get().load(juegoInfor.getString("thumbnail")).into(mainIm);
             tvTitulo.setText(juegoInfor.getString("title"));
+            tvTitulo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Uri uri=Uri.parse(urlJuego);
+                    Intent in=new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(in);
+                }
+            });
             tvDesc.setText(juegoInfor.getString("description"));
             tvplat.setText("Platform: "+juegoInfor.getString("platform"));
             tvCategoria.setText("Genre: "+juegoInfor.getString("genre"));

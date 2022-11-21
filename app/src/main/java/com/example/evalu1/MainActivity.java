@@ -65,7 +65,8 @@ public class MainActivity extends Activity {
         findViewById(R.id.btnLastSearch).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                filtrarResp(opcionText,opcionFiltro);
+                System.out.println(sharedpreferences.getString(opcionText, "")+" "+sharedpreferences.getString(opcionFiltro, ""));
+                filtrarResp(sharedpreferences.getString(opcionFiltro, ""),sharedpreferences.getString(opcionText, ""));
             }
         });
         sharedpreferences = getSharedPreferences(mypreference,Context.MODE_PRIVATE);
