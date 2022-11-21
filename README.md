@@ -16,3 +16,4 @@
   
   Al seleccionar el juego, nos mandara a otro layout con toda la informacion del juego, imagenes del juego, requisitos minimos, plataforma, etc...
   Si tocamos el titulo nos redirigirá a la página oficial del juego.
+  - Esta página dispone un boton de regresar a la página principal.
